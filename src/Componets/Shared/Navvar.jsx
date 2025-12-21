@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Menu, X, Github, House, UserPlus, LogIn } from "lucide-react";
+import { Menu, X, Github, House } from "lucide-react";
 import { NavLink } from "react-router";
 
 const Navvar = () => {
@@ -8,11 +8,7 @@ const Navvar = () => {
   const [toggle, settoggle] = useState(true);
 
   // Dynamic Nav items
-  const navItems = [
-    { name: "Home", path: "/", icon: <House /> },
-    { name: "Register", path: "/register", icon: <UserPlus /> },
-    { name: "LogIn", path: "/login", icon: <LogIn /> },
-  ];
+  const navItems = [{ name: "Home", path: "/", icon: <House /> }];
 
   return (
     <nav className="p-5 bg-gray-50 shadow-md ">

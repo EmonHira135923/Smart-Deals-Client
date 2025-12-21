@@ -1,12 +1,12 @@
 import React from "react";
-import Navvar from "../Componets/Navvar/Navvar.jsx";
-import Footer from "../Componets/Footer/Footer.jsx";
+import Footer from "../Componets/Shared/Footer.jsx";
 import { Outlet } from "react-router";
+import Navvar from "../Componets/Shared/Navvar.jsx";
 
 const Root = () => {
   return (
     <div>
-      <Navvar></Navvar>
+      <Navvar />
       <Outlet></Outlet>
       <Footer></Footer>
     </div>

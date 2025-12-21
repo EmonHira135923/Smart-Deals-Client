@@ -10,4 +10,6 @@
 7 ----> React Lucide-React
 8 ----> React Recharts --- Done
 9 ----> React Axios --- Done
-
+10 ---> React Hook Form --- Done
+11 ---> React Hook dotenv --- Done
+12 ---> React Hook Framer Motion --- Done
