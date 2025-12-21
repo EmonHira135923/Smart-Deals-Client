@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { Menu, X, Github, House } from "lucide-react";
 import { NavLink } from "react-router";
+import useAuth from "../hooks/useAuth";
 
 const Navvar = () => {
+  const { user } = useAuth();
+  console.log(user, "Form Navvar");
   const activeclass =
     "border-b-2 border-[#632ee3] bg-clip-text bg-gradient-to-r from-[#632ee3] to-[#9f62f2] text-purple-700 font-bold";
   const [toggle, settoggle] = useState(true);
