@@ -10,11 +10,9 @@ import {
   LogIn,
   UserPlus,
 } from "lucide-react";
-import { NavLink, useNavigate, useLocation } from "react-router";
-import useAuth from "../hooks/useAuth";
+import { NavLink, useLocation } from "react-router";
 
 const Navbar = () => {
-  const navigate = useNavigate();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -22,7 +20,7 @@ const Navbar = () => {
   // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
+      setScrolled(window.scrollY > 5);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -36,53 +34,55 @@ const Navbar = () => {
   // Active class for NavLinks
   const getNavLinkClass = ({ isActive }) =>
     isActive
-      ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md"
-      : "text-gray-700 hover:bg-gray-100 hover:text-purple-700";
+      ? "text-purple-700 font-semibold border-b-2 border-purple-600"
+      : "text-gray-600 hover:text-purple-600 transition-colors duration-200";
 
   // Nav items
   const navItems = [
-    { name: "Home", path: "/", icon: <Home size={20} /> },
-    { name: "All Products", path: "/all-product", icon: <Package size={20} /> },
+    { name: "Home", path: "/", icon: <Home size={18} /> },
+    { name: "Products", path: "/all-product", icon: <Package size={18} /> },
     {
-      name: "My Products",
+      name: "My Items",
       path: "/my-product",
-      icon: <ShoppingCart size={20} />,
+      icon: <ShoppingCart size={18} />,
     },
-    { name: "My Bids", path: "/my-bids", icon: <Award size={20} /> },
-    { name: "Create", path: "/create-product", icon: <PlusCircle size={20} /> },
+    { name: "Bids", path: "/my-bids", icon: <Award size={18} /> },
+    { name: "Create", path: "/create-product", icon: <PlusCircle size={18} /> },
   ];
 
   return (
     <nav
-      className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-white/95 backdrop-blur-lg shadow-lg" : "bg-white"
+      className={`sticky top-0 z-50 transition-all duration-300 border-b ${
+        scrolled
+          ? "bg-white/90 backdrop-blur-sm shadow-sm border-gray-200"
+          : "bg-white border-gray-100"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <div className="flex items-center space-x-3">
+        <div className="flex justify-between items-center h-14">
+          {/* Logo and Mobile Menu Button */}
+          <div className="flex items-center">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100"
+              className="md:hidden p-2 mr-2 text-gray-600 hover:text-purple-600"
               aria-label="Toggle menu"
             >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
 
             <NavLink
               to="/"
-              className="flex items-center space-x-2 text-2xl font-bold hover:opacity-90 transition-opacity"
+              className="flex items-center space-x-2 hover:opacity-90"
             >
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center">
-                <span className="text-white font-bold">SD</span>
+              <div className="w-8 h-8 rounded bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center">
+                <span className="text-white font-bold text-sm">SD</span>
               </div>
-              <span className="hidden sm:block">
-                Smart
-                <span className="bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+              <div className="hidden sm:block">
+                <span className="text-lg font-bold text-gray-800">Smart</span>
+                <span className="text-lg font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
                   Deals
                 </span>
-              </span>
+              </div>
             </NavLink>
           </div>
 
@@ -93,7 +93,7 @@ const Navbar = () => {
                 key={item.name}
                 to={item.path}
                 className={({ isActive }) => `
-                  flex items-center space-x-2 px-4 py-2.5 rounded-lg font-medium transition-all duration-200
+                  flex items-center space-x-1.5 px-3 py-2 text-sm font-medium
                   ${getNavLinkClass({ isActive })}
                 `}
               >
@@ -103,66 +103,66 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* Sign In / Sign Up Buttons */}
-          <div className="flex items-center space-x-3">
-            {/* Login Button */}
+          {/* Auth Buttons - Compact */}
+          <div className="flex items-center space-x-2">
+            {/* Sign In Button */}
             <NavLink
               to="/login"
-              className="group flex items-center space-x-2 px-5 py-2.5 rounded-lg font-medium text-gray-700 hover:bg-gray-100 transition-all duration-200 border border-gray-200 hover:border-purple-300"
+              className="group flex items-center space-x-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 hover:text-purple-600 border border-gray-300 rounded-lg hover:border-purple-400 transition-all duration-200"
             >
-              <LogIn size={20} className="group-hover:text-purple-600" />
+              <LogIn size={16} />
               <span className="hidden sm:inline">Sign In</span>
             </NavLink>
 
-            {/* Register Button */}
+            {/* Sign Up Button */}
             <NavLink
               to="/reg"
-              className="flex items-center space-x-2 px-5 py-2.5 rounded-lg font-medium text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 shadow-md hover:shadow-lg transition-all duration-200"
+              className="flex items-center space-x-1.5 px-3 py-1.5 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 rounded-lg transition-all duration-200 shadow-sm hover:shadow"
             >
-              <UserPlus size={20} />
+              <UserPlus size={16} />
               <span className="hidden sm:inline">Sign Up</span>
             </NavLink>
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu - More Compact */}
         <div
-          className={`md:hidden transition-all duration-300 ease-in-out ${
+          className={`md:hidden transition-all duration-200 ease-in-out ${
             isMenuOpen
-              ? "max-h-96 opacity-100"
+              ? "max-h-80 opacity-100 py-2"
               : "max-h-0 opacity-0 overflow-hidden"
           }`}
         >
-          <div className="py-4 border-t border-gray-100">
+          <div className="pt-2 border-t border-gray-100">
             {navItems.map((item) => (
               <NavLink
                 key={item.name}
                 to={item.path}
                 className={({ isActive }) => `
-                  flex items-center space-x-3 px-4 py-3 rounded-lg mb-1 transition-all duration-200
-                  ${getNavLinkClass({ isActive })}
+                  flex items-center space-x-2 px-3 py-2 text-sm font-medium rounded-lg mb-1
+                  ${isActive ? "bg-purple-50 text-purple-700" : "text-gray-600 hover:bg-gray-50"}
                 `}
               >
                 {item.icon}
-                <span className="font-medium">{item.name}</span>
+                <span>{item.name}</span>
               </NavLink>
             ))}
 
             {/* Mobile Auth Buttons */}
-            <div className="mt-4 pt-4 border-t border-gray-100 space-y-2">
+            <div className="mt-3 pt-3 border-t border-gray-100 space-y-2">
               <NavLink
                 to="/login"
-                className="flex items-center justify-center space-x-2 px-4 py-3 rounded-lg font-medium text-gray-700 border border-gray-300 hover:bg-gray-50 transition-all duration-200"
+                className="flex items-center justify-center space-x-2 px-3 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
               >
-                <LogIn size={20} />
+                <LogIn size={16} />
                 <span>Sign In</span>
               </NavLink>
 
               <NavLink
                 to="/reg"
-                className="flex items-center justify-center space-x-2 px-4 py-3 rounded-lg font-medium text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 transition-all duration-200"
+                className="flex items-center justify-center space-x-2 px-3 py-2 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg"
               >
-                <UserPlus size={20} />
+                <UserPlus size={16} />
                 <span>Sign Up</span>
               </NavLink>
             </div>
