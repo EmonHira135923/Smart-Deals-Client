@@ -5,7 +5,6 @@ const AuthContexts = ({ children }) => {
   const user = {
     name: "Emon",
   };
-
   const authinfo = {
     user,
   };
