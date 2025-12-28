@@ -3,9 +3,21 @@ import Navbar from "../../../Componets/Shared/Navvar";
 import { NavLink } from "react-router";
 import { Eye, EyeOff, Mail, Lock, User, Phone, ArrowRight } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
+import useAuth from "../../hooks/useAuth";
 
 const RegistrationForm = () => {
+  const { signinwithgoogle } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
+
+  const handlegooglelogin = () => {
+    signinwithgoogle()
+      .then((result) => {
+        console.log("google button clicked", result.user);
+      })
+      .catch((err) => {
+        console.log("error found", err.message);
+      });
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
@@ -30,6 +42,7 @@ const RegistrationForm = () => {
           <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 sm:p-8">
             {/* Google Sign-Up Button */}
             <button
+              onClick={handlegooglelogin}
               type="button"
               className="w-full flex items-center justify-center space-x-3 py-3 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200 mb-6"
             >
