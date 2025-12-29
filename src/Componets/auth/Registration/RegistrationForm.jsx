@@ -1,23 +1,46 @@
 import React, { useState } from "react";
 import Navbar from "../../../Componets/Shared/Navvar";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import { Eye, EyeOff, Mail, Lock, User, Phone, ArrowRight } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import useAuth from "../../hooks/useAuth";
+import { toast } from "react-toastify";
 
 const RegistrationForm = () => {
-  const { signinwithgoogle } = useAuth();
+  const { signinwithgoogle, loading, createuserwithemailandpassword } =
+    useAuth();
   const [showPassword, setShowPassword] = useState(false);
+  const naviagate = useNavigate();
+
+  const handleregform = (e) => {
+    e.preventDefault();
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    createuserwithemailandpassword(email, password)
+      .then((result) => {
+        toast.success("User Created Succesfully");
+        e.target.reset();
+        naviagate("/login");
+      })
+      .catch((err) => {
+        toast.error("User not created");
+      });
+  };
 
   const handlegooglelogin = () => {
     signinwithgoogle()
       .then((result) => {
-        console.log("google button clicked", result.user);
+        toast.success("Registration Succesfully", result.user);
+        naviagate("/login");
       })
       .catch((err) => {
-        console.log("error found", err.message);
+        toast.error("User not created");
       });
   };
+
+  if (loading) {
+    return <span className="loading loading-ball loading-xl"></span>;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
@@ -65,7 +88,7 @@ const RegistrationForm = () => {
             </div>
 
             {/* Registration Form */}
-            <form>
+            <form onSubmit={handleregform}>
               {/* Name Field */}
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-2">

@@ -1,21 +1,45 @@
 import React, { useState } from "react";
 import Navbar from "../../../Componets/Shared/Navvar";
-import { NavLink } from "react-router";
+import { NavLink, useLocation, useNavigate } from "react-router";
 import { Eye, EyeOff, Mail, Lock, ArrowRight } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
+import useAuth from "../../hooks/useAuth";
+import { toast } from "react-toastify";
 
 const LoginForm = () => {
+  const { signinuserwithemailandpassword, loading, signinwithgoogle } =
+    useAuth();
   const [showPassword, setShowPassword] = useState(false);
+  const naviagate = useNavigate();
+  const location = useLocation();
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form submitted:");
-    // Login logic will be implemented later
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    signinuserwithemailandpassword(email, password)
+      .then((result) => {
+        toast.success("User Created from login Succesfully");
+        e.target.reset();
+        naviagate(location?.state || "/");
+      })
+      .catch((err) => {
+        toast.error("User not created");
+      });
+  };
+  const handlegooglelogin = () => {
+    signinwithgoogle()
+      .then((result) => {
+        toast.success("Registration Succesfully", result.user);
+        naviagate(location?.state || "/");
+      })
+      .catch((err) => {
+        toast.error("User not created");
+      });
   };
 
-  const handleGoogleSignIn = () => {
-    console.log("Google sign in clicked");
-    // Google sign in logic will be implemented later
-  };
+  if (loading) {
+    return <span className="loading loading-ball loading-xl"></span>;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
@@ -41,7 +65,7 @@ const LoginForm = () => {
           <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 sm:p-8">
             {/* Google Sign-In Button */}
             <button
-              onClick={handleGoogleSignIn}
+              onClick={handlegooglelogin}
               type="button"
               className="w-full flex items-center justify-center space-x-3 py-3 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200 mb-6"
             >

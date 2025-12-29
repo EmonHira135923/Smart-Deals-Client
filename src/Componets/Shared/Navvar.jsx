@@ -11,8 +11,11 @@ import {
   UserPlus,
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router";
+import useAuth from "../hooks/useAuth";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
+  const { user, logoutwithemailandpassword, loading } = useAuth();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -31,6 +34,15 @@ const Navbar = () => {
     setIsMenuOpen(false);
   }, [location]);
 
+  // handle logout
+  const handlelogout = () => {
+    logoutwithemailandpassword()
+      .then((result) => {
+        toast.success("Logout Succesfully", result);
+      })
+      .catch((err) => toast.error("Error Found", err.message));
+  };
+
   // Active class for NavLinks
   const getNavLinkClass = ({ isActive }) =>
     isActive
@@ -38,17 +50,36 @@ const Navbar = () => {
       : "text-gray-600 hover:text-purple-600 transition-colors duration-200";
 
   // Nav items
-  const navItems = [
+  const PublicItems = [
     { name: "Home", path: "/", icon: <Home size={18} /> },
     { name: "Products", path: "/all-product", icon: <Package size={18} /> },
+  ];
+
+  const privateitems = [
     {
       name: "My Items",
       path: "/my-product",
       icon: <ShoppingCart size={18} />,
     },
     { name: "Bids", path: "/my-bids", icon: <Award size={18} /> },
-    { name: "Create", path: "/create-product", icon: <PlusCircle size={18} /> },
+    {
+      name: "Create",
+      path: "/create-product",
+      icon: <PlusCircle size={18} />,
+    },
   ];
+
+  const navItems = () => {
+    if (user) {
+      return [...PublicItems, ...privateitems];
+    }
+    return PublicItems;
+  };
+
+  // Loading state
+  if (loading) {
+    return <span className="loading loading-ball loading-xl"></span>;
+  }
 
   return (
     <nav
@@ -88,7 +119,7 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1">
-            {navItems.map((item) => (
+            {navItems().map((item) => (
               <NavLink
                 key={item.name}
                 to={item.path}
@@ -105,23 +136,35 @@ const Navbar = () => {
 
           {/* Auth Buttons - Compact */}
           <div className="flex items-center space-x-2">
-            {/* Sign In Button */}
-            <NavLink
-              to="/login"
-              className="group flex items-center space-x-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 hover:text-purple-600 border border-gray-300 rounded-lg hover:border-purple-400 transition-all duration-200"
-            >
-              <LogIn size={16} />
-              <span className="hidden sm:inline">Sign In</span>
-            </NavLink>
+            {!user ? (
+              <>
+                {/* Sign In Button */}
+                <NavLink
+                  to="/login"
+                  className="group flex items-center space-x-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 hover:text-purple-600 border border-gray-300 rounded-lg hover:border-purple-400 transition-all duration-200"
+                >
+                  <LogIn size={16} />
+                  <span className="hidden sm:inline">Sign In</span>
+                </NavLink>
 
-            {/* Sign Up Button */}
-            <NavLink
-              to="/reg"
-              className="flex items-center space-x-1.5 px-3 py-1.5 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 rounded-lg transition-all duration-200 shadow-sm hover:shadow"
-            >
-              <UserPlus size={16} />
-              <span className="hidden sm:inline">Sign Up</span>
-            </NavLink>
+                {/* Sign Up Button */}
+                <NavLink
+                  to="/reg"
+                  className="flex items-center space-x-1.5 px-3 py-1.5 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 rounded-lg transition-all duration-200 shadow-sm hover:shadow"
+                >
+                  <UserPlus size={16} />
+                  <span className="hidden sm:inline">Sign Up</span>
+                </NavLink>
+              </>
+            ) : (
+              <button
+                onClick={handlelogout}
+                className="flex items-center space-x-1.5 px-3 py-1.5 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 rounded-lg transition-all duration-200 shadow-sm hover:shadow"
+              >
+                {" "}
+                Logout{" "}
+              </button>
+            )}
           </div>
         </div>
 
@@ -134,7 +177,7 @@ const Navbar = () => {
           }`}
         >
           <div className="pt-2 border-t border-gray-100">
-            {navItems.map((item) => (
+            {navItems().map((item) => (
               <NavLink
                 key={item.name}
                 to={item.path}
