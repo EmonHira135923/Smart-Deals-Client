@@ -29,7 +29,9 @@ const ProductDetails = () => {
       buyer_contact,
       buyer_image,
       bid_price,
+      status: "pending",
     };
+    console.log(newbids);
     // feteh and post bids for backend insert in mongodb
   };
 
