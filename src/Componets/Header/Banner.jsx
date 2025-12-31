@@ -1,4 +1,4 @@
-import React from "react";
+import React, { use } from "react";
 import { NavLink } from "react-router";
 import {
   Search,
@@ -10,7 +10,8 @@ import {
 } from "lucide-react";
 import RecentProduct from "./RecentProduct";
 
-const Banner = () => {
+const Banner = ({ latestproductpromise }) => {
+  const latestproduct = use(latestproductpromise);
   return (
     <div className="bg-gradient-to-b from-white to-purple-50">
       {/* Main Banner Section */}
@@ -187,7 +188,7 @@ const Banner = () => {
 
       {/* Recent Products Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-        <RecentProduct />
+        <RecentProduct latestproduct={latestproduct} />
       </div>
     </div>
   );

@@ -10,6 +10,8 @@ import AllProducts from "../Pages/AllProducts.jsx";
 import MyProducts from "../Pages/MyProducts.jsx";
 import ErrorPage from "../Pages/ErrorPage.jsx";
 import PrivateRouter from "./PrivateRouter.jsx";
+import Baseurl from "../Componets/utils/Baseurl.js";
+import ProductDetails from "../Componets/Header/ProductDetails.jsx";
 
 const Router = createBrowserRouter([
   {
@@ -24,6 +26,16 @@ const Router = createBrowserRouter([
         element: (
           <PrivateRouter>
             <MyProducts />
+          </PrivateRouter>
+        ),
+      },
+      {
+        path: "/product/:id",
+        loader: ({ params }) =>
+          fetch(`${Baseurl}/latest-products/${params.id}`),
+        element: (
+          <PrivateRouter>
+            <ProductDetails />
           </PrivateRouter>
         ),
       },

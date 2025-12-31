@@ -78,7 +78,7 @@ const Navbar = () => {
 
   // Loading state
   if (loading) {
-    return <span className="loading loading-ball loading-xl"></span>;
+    return <NavbarSkeleton />;
   }
 
   return (
@@ -89,6 +89,7 @@ const Navbar = () => {
           : "bg-white border-gray-100"
       }`}
     >
+      {/* Rest of your Navbar code remains the same */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-14">
           {/* Logo and Mobile Menu Button */}
@@ -211,6 +212,77 @@ const Navbar = () => {
             </div>
           </div>
         </div>
+      </div>
+    </nav>
+  );
+};
+
+// Navbar Skeleton Component
+const NavbarSkeleton = () => {
+  return (
+    <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-sm shadow-sm border-b border-gray-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-14">
+          {/* Left side - Logo and mobile button */}
+          <div className="flex items-center space-x-4">
+            {/* Mobile menu button skeleton */}
+            <div className="md:hidden w-8 h-8 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg animate-pulse"></div>
+
+            {/* Logo skeleton */}
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-gradient-to-br from-gray-200 to-gray-300 rounded animate-pulse"></div>
+              <div className="hidden sm:flex space-x-1">
+                <div className="w-12 h-4 bg-gradient-to-r from-gray-200 to-gray-300 rounded animate-pulse"></div>
+                <div className="w-16 h-4 bg-gradient-to-r from-gray-200 to-gray-300 rounded animate-pulse"></div>
+              </div>
+            </div>
+          </div>
+
+          {/* Center - Navigation items skeleton (Desktop) */}
+          <div className="hidden md:flex items-center space-x-4">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="flex items-center space-x-1.5">
+                <div className="w-4 h-4 bg-gradient-to-r from-gray-200 to-gray-300 rounded animate-pulse"></div>
+                <div
+                  className="w-16 h-4 bg-gradient-to-r from-gray-200 to-gray-300 rounded animate-pulse"
+                  style={{ animationDelay: `${i * 0.1}s` }}
+                ></div>
+              </div>
+            ))}
+          </div>
+
+          {/* Right side - Auth buttons skeleton */}
+          <div className="flex items-center space-x-2">
+            <div className="flex space-x-2">
+              <div className="w-20 h-8 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg animate-pulse"></div>
+              <div className="w-20 h-8 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile menu skeleton (hidden by default) */}
+        <div className="md:hidden mt-2">
+          <div className="space-y-2">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="flex items-center space-x-2 px-3 py-2">
+                <div className="w-4 h-4 bg-gradient-to-r from-gray-200 to-gray-300 rounded animate-pulse"></div>
+                <div
+                  className="w-24 h-4 bg-gradient-to-r from-gray-200 to-gray-300 rounded animate-pulse"
+                  style={{ animationDelay: `${i * 0.1}s` }}
+                ></div>
+              </div>
+            ))}
+
+            {/* Mobile auth buttons skeleton */}
+            <div className="pt-2 border-t border-gray-100 space-y-2">
+              <div className="w-full h-10 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg animate-pulse"></div>
+              <div className="w-full h-10 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+
+        {/* Shimmer effect overlay */}
+        <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent animate-[shimmer_1.5s_infinite] pointer-events-none"></div>
       </div>
     </nav>
   );

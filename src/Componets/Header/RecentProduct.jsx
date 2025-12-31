@@ -1,8 +1,9 @@
 import React from "react";
 import { NavLink } from "react-router";
-import { Eye, Heart, Star, ShoppingBag, TrendingUp } from "lucide-react";
+import { TrendingUp } from "lucide-react";
+import ProductCard from "./ProductCard";
 
-const RecentProduct = () => {
+const RecentProduct = ({ latestproduct }) => {
   return (
     <div className="bg-gradient-to-b from-white to-gray-50 py-8 px-4">
       {/* Header */}
@@ -23,60 +24,10 @@ const RecentProduct = () => {
         </div>
 
         {/* Product Card */}
-        <div className="max-w-sm mx-auto">
-          <div className="group bg-white rounded-2xl shadow-lg border border-gray-200 hover:shadow-2xl hover:border-purple-300 transition-all duration-300 overflow-hidden">
-            {/* Product Image */}
-            <div className="relative overflow-hidden">
-              {/* Main Image */}
-              <div className="aspect-square bg-gradient-to-br from-purple-100 to-indigo-100 relative">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center">
-                    <ShoppingBag className="w-16 h-16 text-purple-300 mx-auto mb-2" />
-                    <p className="text-purple-500 font-medium">Product Image</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Product Details */}
-            <div className="p-5">
-              {/* Title */}
-              <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-purple-700 transition-colors line-clamp-1">
-                Apple iPhone 14 Pro Max - 256GB
-              </h3>
-
-              {/* Description */}
-              <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                Brand new sealed box with 2 years warranty. Latest model with
-                advanced camera features.
-              </p>
-
-              {/* Price and Seller */}
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-2xl font-bold text-gray-900">
-                      $1,199
-                    </span>
-                  </div>
-                </div>
-              </div>
-              {/* Action Buttons */}
-              <div className="flex space-x-3">
-                <NavLink
-                  to="/product-details"
-                  className="flex-1 flex items-center justify-center space-x-2 px-4 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-indigo-700 transition-all duration-200 shadow-md hover:shadow-lg"
-                >
-                  <Eye className="w-4 h-4" />
-                  <span>View Details</span>
-                </NavLink>
-
-                <button className="px-4 py-3 border border-purple-600 text-purple-600 rounded-lg font-medium hover:bg-purple-50 transition-colors">
-                  <ShoppingBag className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          {latestproduct.map((product) => (
+            <ProductCard key={product._id} product={product} />
+          ))}
         </div>
 
         {/* Call to Action */}
