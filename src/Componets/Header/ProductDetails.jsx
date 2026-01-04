@@ -26,6 +26,12 @@ const ProductDetails = () => {
   }, [id, loading]);
 
   if (loading) {
+    <p>
+      {" "}
+      <span className="loading loading-infinity text-2xl">
+        loaing here....
+      </span>{" "}
+    </p>;
   }
 
   // Show Modal

@@ -20,7 +20,11 @@ const Router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { index: true, Component: Home },
-      { path: "/all-product", Component: AllProducts },
+      {
+        path: "/all-product",
+        loader: () => fetch(`${Baseurl}/get-products`),
+        Component: AllProducts,
+      },
       {
         path: "/my-product",
         element: (
