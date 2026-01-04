@@ -1,12 +1,32 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLoaderData } from "react-router";
 import { MapPin, Phone, Clock } from "lucide-react";
 import useAuth from "../hooks/useAuth";
+import Baseurl from "../utils/Baseurl";
+import { toast } from "react-toastify";
 
 const ProductDetails = () => {
   const product = useLoaderData();
   const usepopupref = useRef(null);
   const { user } = useAuth();
+  const [bids, setBids] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const id = product._id;
+  // console.log(id);
+
+  // useeffect
+
+  useEffect(() => {
+    fetch(`${Baseurl}/products/by/bids/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setBids(data);
+        setLoading(false);
+      });
+  }, [id, loading]);
+
+  if (loading) {
+  }
 
   // Show Modal
   const handlepopup = () => {
@@ -16,23 +36,48 @@ const ProductDetails = () => {
   // Handle Form
   const handleform = (e) => {
     e.preventDefault();
-    const productid = product._id;
+    const productId = product._id;
     const name = e.target.name.value;
     const email = e.target.email.value;
     const buyer_contact = e.target.buyer_contact.value;
     const buyer_image = e.target.buyer_image.value;
-    const bid_price = e.target.bid_price.value;
-    const newbids = {
-      productid,
-      name,
-      email,
+    const bid_price = Number(e.target.bid_price.value); // convert to number
+
+    const newBid = {
+      productId,
+      buyer_name: name,
+      buyer_email: email,
       buyer_contact,
       buyer_image,
       bid_price,
       status: "pending",
     };
-    console.log(newbids);
-    // feteh and post bids for backend insert in mongodb
+
+    // Post bid to backend
+    fetch(`${Baseurl}/create-bids`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newBid),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.result.insertedId) {
+          // Close modal
+          usepopupref.current.close();
+          toast.success("Bid Successfully Added");
+
+          // Add _id and update state
+          newBid._id = data.result._id;
+          const updatedBids = [...bids, newBid];
+          updatedBids.sort((a, b) => a.bid_price - b.bid_price);
+          setBids(updatedBids);
+
+          // Reset form
+          e.target.reset();
+        }
+      });
   };
 
   return (
@@ -125,7 +170,6 @@ const ProductDetails = () => {
                       placeholder="Enter your name"
                       className="input input-bordered w-full"
                       readOnly
-                      disabled
                     />
                   </div>
 
@@ -141,7 +185,6 @@ const ProductDetails = () => {
                       placeholder="Enter your email"
                       className="input input-bordered w-full"
                       readOnly
-                      disabled
                     />
                   </div>
 
@@ -195,6 +238,7 @@ const ProductDetails = () => {
 
                   {/* Actions */}
                   <div className="modal-action flex justify-between">
+                    {/* Submit Button */}
                     <button
                       type="submit"
                       className="btn bg-gradient-to-r from-purple-600 to-indigo-600 text-white border-none"
@@ -202,9 +246,10 @@ const ProductDetails = () => {
                       Submit Bid
                     </button>
 
-                    <form method="dialog">
-                      <button className="btn btn-outline">Cancel</button>
-                    </form>
+                    {/* Cancel Button */}
+                    <button type="button" className="btn btn-outline">
+                      Cancel
+                    </button>
                   </div>
                 </form>
               </div>
@@ -235,6 +280,74 @@ const ProductDetails = () => {
                 {product.status}
               </span>
             </div>
+          </div>
+        </div>
+      </div>
+      {/* Products see here */}
+      <div>
+        <div className="mt-10 max-w-6xl mx-auto">
+          <h1 className="text-2xl font-semibold mb-4">
+            Bids For This Product: {bids.length}
+          </h1>
+
+          <div className="overflow-x-auto">
+            <table className="table-auto w-full border border-gray-200">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="px-4 py-2 border">#</th>
+                  <th className="px-4 py-2 border">Buyer Name</th>
+                  <th className="px-4 py-2 border">Email</th>
+                  <th className="px-4 py-2 border">Contact</th>
+                  <th className="px-4 py-2 border">Profile Image</th>
+                  <th className="px-4 py-2 border">Bid Price (৳)</th>
+                  <th className="px-4 py-2 border">Status</th>
+                  <th className="px-4 py-2 border">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {bids.map((data, index) => (
+                  <tr key={data._id} className="text-center">
+                    <td className="px-4 py-2 border">{index + 1}</td>
+                    <td className="px-4 py-2 border">{data.buyer_name}</td>
+                    <td className="px-4 py-2 border">{data.buyer_email}</td>
+                    <td className="px-4 py-2 border">{data.buyer_contact}</td>
+                    <td className="px-4 py-2 border">
+                      <img
+                        src={data.buyer_image}
+                        alt={data.buyer_name}
+                        className="w-10 h-10 rounded-full mx-auto"
+                      />
+                    </td>
+                    <td className="px-4 py-2 border">{data.bid_price}</td>
+                    <td className="px-4 py-2 border">
+                      <span
+                        className={`px-3 py-1 rounded-full text-white ${
+                          data.status === "pending"
+                            ? "bg-yellow-500"
+                            : "bg-green-600"
+                        }`}
+                      >
+                        {data.status}
+                      </span>
+                    </td>
+                    <td className="px-4 py-2 border flex justify-center gap-2">
+                      <button
+                        className="px-2 py-1 bg-green-500 text-white rounded hover:opacity-80"
+                        // onClick={() => handleBidAction(data._id, "confirmed")}
+                      >
+                        Accept Offer
+                      </button>
+                      <button
+                        className="px-2 py-1 bg-red-500 text-white rounded hover:opacity-80"
+                        // onClick={() => handleBidAction(data._id, "rejected")}
+                      >
+                        Reject Offer
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
