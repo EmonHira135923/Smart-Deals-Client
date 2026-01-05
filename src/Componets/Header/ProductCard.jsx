@@ -10,7 +10,12 @@ import {
 } from "lucide-react";
 import { NavLink } from "react-router";
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, loading = false }) => {
+  // If loading, return skeleton
+  if (loading) {
+    return <ProductCardSkeleton />;
+  }
+
   // Calculate discount percentage if original price exists
   const hasDiscount =
     product.original_price && product.original_price > product.price_min;
@@ -56,6 +61,10 @@ const ProductCard = ({ product }) => {
             src={product.image}
             alt={product.title}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            onError={(e) => {
+              e.target.src = "https://via.placeholder.com/400x400";
+              e.target.alt = "Product image not available";
+            }}
           />
 
           {/* Image Overlay Gradient */}
@@ -149,6 +158,73 @@ const ProductCard = ({ product }) => {
           NEW
         </div>
       )}
+    </div>
+  );
+};
+
+// Skeleton Component
+const ProductCardSkeleton = () => {
+  return (
+    <div className="group bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden h-full relative animate-pulse">
+      {/* Top Badges Skeleton */}
+      <div className="absolute top-3 left-3 right-3 z-10 flex justify-between">
+        <div className="flex flex-col gap-2">
+          <div className="px-3 py-1.5 bg-gray-200 rounded-full w-16"></div>
+          <div className="px-3 py-1.5 bg-gray-200 rounded-full w-20"></div>
+        </div>
+        <div className="w-9 h-9 bg-gray-200 rounded-full"></div>
+      </div>
+
+      {/* Product Image Skeleton */}
+      <div className="relative overflow-hidden">
+        <div className="aspect-square">
+          <div className="w-full h-full bg-gray-200"></div>
+        </div>
+      </div>
+
+      {/* Product Details Skeleton */}
+      <div className="p-6 flex flex-col flex-grow">
+        {/* Title Skeleton */}
+        <div className="h-6 bg-gray-200 rounded mb-4"></div>
+        <div className="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
+
+        {/* Rating Skeleton */}
+        <div className="flex items-center gap-2 mb-3">
+          <div className="flex gap-1">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="w-4 h-4 bg-gray-200 rounded-full"></div>
+            ))}
+          </div>
+          <div className="h-3 bg-gray-200 rounded w-20"></div>
+        </div>
+
+        {/* Description Skeleton */}
+        <div className="space-y-2 mb-5">
+          <div className="h-3 bg-gray-200 rounded"></div>
+          <div className="h-3 bg-gray-200 rounded w-5/6"></div>
+          <div className="h-3 bg-gray-200 rounded w-4/6"></div>
+        </div>
+
+        {/* Price Section Skeleton */}
+        <div className="mb-5">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="h-7 bg-gray-200 rounded w-24"></div>
+            <div className="h-5 bg-gray-200 rounded w-16"></div>
+          </div>
+
+          {/* Features Icons Skeleton */}
+          <div className="flex items-center gap-4 mt-3">
+            <div className="h-3 bg-gray-200 rounded w-24"></div>
+            <div className="h-3 bg-gray-200 rounded w-24"></div>
+          </div>
+        </div>
+
+        {/* Action Buttons Skeleton */}
+        <div className="flex gap-3 mt-auto">
+          <div className="flex-1 h-12 bg-gray-200 rounded-xl"></div>
+          <div className="w-12 sm:w-auto sm:flex-1 h-12 bg-gray-200 rounded-xl"></div>
+        </div>
+      </div>
     </div>
   );
 };

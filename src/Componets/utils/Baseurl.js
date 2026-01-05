@@ -1,2 +1,2 @@
-const Baseurl = import.meta.env.VITE_BackendUrl;
+const Baseurl = import.meta.env.VITE_BACKEND_URL;
 export default Baseurl;
