@@ -30,6 +30,7 @@ const LoginForm = () => {
     signinwithgoogle()
       .then((result) => {
         toast.success("Registration Succesfully", result.user);
+        console.log("token", result);
         naviagate(location?.state || "/");
       })
       .catch((err) => {

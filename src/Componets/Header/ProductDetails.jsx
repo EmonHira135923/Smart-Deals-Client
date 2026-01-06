@@ -19,7 +19,11 @@ const ProductDetails = () => {
     const fetchBids = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${Baseurl}/products/by/bids/${id}`);
+        const response = await fetch(`${Baseurl}/products/by/bids/${id}`, {
+          headers: {
+            authorization: `Bearer ${user.accessToken}`,
+          },
+        });
         const data = await response.json();
         setBids(data);
       } catch (error) {
